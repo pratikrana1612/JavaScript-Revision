@@ -56,15 +56,25 @@
 // const btn = document.querySelector("button");
 // btn.addEventListener("click", p.greet.bind(p));
 
+// const course={
+//   title:'Javscript - The Complete Guide',
+//   rating:5
+// }
+// Object.setPrototypeOf(course,{
+//   // ...Object.getPrototypeOf(course),
+//   printRating:function(){
+//     console.log('tasdjfasklj')
+//   }
+// })
+// console.log(course.__proto__)
 
-const course={
-  title:'Javscript - The Complete Guide',
-  rating:5
-}
-Object.setPrototypeOf(course,{
-  // ...Object.getPrototypeOf(course),
-  printRating:function(){
-    console.log('tasdjfasklj')
-  }
-})
-console.log(course.__proto__)
+// console.log("topa tapu");-->1
+
+// setTimeout(() => {
+//   console.log("tameto");
+// }, 0);--->4
+
+// Promise.resolve().then(() => console.log('resolved promise'))--->3
+
+
+// console.log('adfasdfa🍅🍓')-->2
