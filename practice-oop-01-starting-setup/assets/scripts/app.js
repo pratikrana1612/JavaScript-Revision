@@ -59,9 +59,9 @@ class Tooltip extends Component {
     // toolTipElment.textContent = this.text;
 
     const toolTipTemplate = document.getElementById("toolTip");
-    const toolTipBody=document.importNode(toolTipTemplate.content,true)
-    toolTipBody.querySelector('p').textContent=this.text
-    toolTipElment.append(toolTipBody)
+    const toolTipBody = document.importNode(toolTipTemplate.content, true);
+    toolTipBody.querySelector("p").textContent = this.text;
+    toolTipElment.append(toolTipBody);
 
     const leftPos = this.hostElement.offsetLeft;
     const topPos = this.hostElement.offsetTop;
@@ -91,6 +91,7 @@ class ProjectItem {
     this.switchfun = switchfun;
     this.connectSwitchButton();
     this.connectMoreInfoButton();
+    this.connectDraggable();
   }
   connectSwitchButton(type = null, FirstTimeChanging = false) {
     const projectItemElement = document.getElementById(this.id);
@@ -100,6 +101,16 @@ class ProjectItem {
     // swithBtn.textContent = type === "active" ? "finished" : "active";
     swithBtn.addEventListener("click", this.switchfun.bind(null, this.id));
     // swithBtn.addEventListener("click", App.switch.bind(null, this.id));
+  }
+  connectDraggable() {
+    const item=document.getElementById(this.id)
+    item.addEventListener("dragstart", (event) => {
+      event.dataTransfer.setData("text/plain", this.id);
+      event.dataTransfer.moveElement = "move";
+    });
+    item.addEventListener('dragend',event =>{
+      console.log(event)
+    })
   }
   update(updatedFunc, type) {
     this.switchfun = updatedFunc;
@@ -142,6 +153,37 @@ class ProjectList {
       );
     }
     console.log(this.projects);
+    this.connectDropable();
+  }
+
+  connectDropable() {
+    const list = document.querySelector(`#${this.type}-projects ul`);
+    list.addEventListener("dragenter", (event) => {
+      if (event.dataTransfer.types[0] === "plain/text") {
+        event.preventDefault();
+      }
+      list.parentElement.classList.add("droppable");
+    });
+    list.addEventListener("dragover", (event) => {
+      event.preventDefault();
+      list.parentElement.classList.add("droppable");
+    });
+    list.addEventListener("dragleave", (event) => {
+      if (event.relatedTarget.closest(`#${this.type}-projects ul`) !== list) {
+        list.parentElement.classList.remove("droppable");
+      }
+    });
+    list.addEventListener("drop", (event) => {
+      const proId = event.dataTransfer.getData("text/plain");
+      if (this.projects.find((p) => p.id === proId)) {
+        return;
+      }
+      document
+        .getElementById(proId)
+        .querySelector("button:last-of-type")
+        .click();
+      list.parentElement.classList.remove("droppable");
+    });
   }
 
   settingFunction(switchHandlerFunction) {
@@ -180,11 +222,11 @@ class App {
     // someScript.textContent='alert("fa")'
     // document.body.append(someScript)
   }
-  static fun(){
-    const someScript=document.createElement('script')
-    someScript.src='assets/scripts/analytic.js'
-    someScript.defer=true
-    document.body.append(someScript)
+  static fun() {
+    const someScript = document.createElement("script");
+    someScript.src = "assets/scripts/analytic.js";
+    someScript.defer = true;
+    document.body.append(someScript);
   }
 
   //   static switch(id) {
@@ -194,6 +236,5 @@ class App {
 
 App.init();
 setTimeout(() => {
-  App.fun()
-  
+  App.fun();
 }, 2000);
