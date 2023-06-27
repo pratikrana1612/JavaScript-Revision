@@ -38,25 +38,29 @@ class PlaceFinder {
       this.map = new Map(coordinates);
       // this.map.render()
     }
-    fetch("http://localhost:3000/add-location", {
-      method: "POST",
-      body: JSON.stringify({
-        address: address,
-        lat: coordinates[0],
-        lng: coordinates[1],
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data)
-        const locationId = data.locId;
-        this.sharedBtn.disabled = false;
-        const inputValue = document.getElementById("share-link");
-        inputValue.value = `${location.origin}/my-place?location=${locationId}`;
-      });
+    this.sharedBtn.disabled = false;
+    const inputValue = document.getElementById("share-link");
+    inputValue.value = `${location.origin}/my-place?lat=${coordinates[0]}&lng=${coordinates[1]}&address=${encodeURI(address)}`;
+    // use when you use mongodb
+    // fetch("http://localhost:3000/add-location", {
+    //   method: "POST",
+    //   body: JSON.stringify({
+    //     address: address,
+    //     lat: coordinates[0],
+    //     lng: coordinates[1],
+    //   }),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     console.log(data)
+    //     const locationId = data.locId;
+    //     this.sharedBtn.disabled = false;
+    //     const inputValue = document.getElementById("share-link");
+    //     inputValue.value = `${location.origin}/my-place?location=${locationId}`;
+    //   });
   }
   getUserLocationHandler() {
     if (!navigator.geolocation) {
